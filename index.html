@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; connect-src https://api.github.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>Notepad</title>
+  <meta name="theme-color" content="#3E5285">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Notepad">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/app.css">
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+
+  <!-- Erster Start: Verbindung zu GitHub -->
+  <main id="setup" hidden>
+    <form id="setup-form" class="setup-card" autocomplete="off">
+      <h1 class="brand-big">Notepad</h1>
+      <p class="setup-text">Verbinde das Notepad mit deinem Notizen-Repo auf GitHub. Der Token wird nur auf diesem Gerät gespeichert.</p>
+      <label>GitHub-Konto
+        <input id="setup-owner" name="owner" required value="bntysx" autocapitalize="off" spellcheck="false">
+      </label>
+      <label>Repo mit den Notizen
+        <input id="setup-repo" name="repo" required value="notizen" autocapitalize="off" spellcheck="false">
+      </label>
+      <label>Token
+        <input id="setup-token" name="token" type="password" required placeholder="github_pat_…" autocapitalize="off" spellcheck="false">
+      </label>
+      <p id="setup-error" class="form-error" hidden></p>
+      <button type="submit" class="btn primary" id="setup-submit">Verbinden</button>
+    </form>
+  </main>
+
+  <div id="app" hidden>
+    <!-- PC: Kopfleiste mit Menüs -->
+    <header id="titlebar">
+      <nav id="menubar" aria-label="Menü">
+        <button type="button" data-menu="datei">Datei</button>
+        <button type="button" data-menu="bearbeiten">Bearbeiten</button>
+        <button type="button" data-menu="ansicht">Ansicht</button>
+      </nav>
+      <span id="doc-title"></span>
+      <span class="brand">Notepad</span>
+    </header>
+
+    <!-- iPhone: Kopfleiste -->
+    <header id="mobilebar">
+      <button type="button" id="m-back" class="m-btn" hidden><span class="chev">‹</span> <span id="m-back-label"></span></button>
+      <span id="m-title" class="m-title"></span>
+      <span class="m-right">
+        <button type="button" id="m-more" class="m-btn" aria-label="Weitere Aktionen">•••</button>
+        <button type="button" id="m-new" class="m-btn">+ Neu</button>
+      </span>
+    </header>
+
+    <div id="main">
+      <aside id="sidebar">
+        <div class="search-wrap">
+          <input id="search" type="search" placeholder="In allen Notizen suchen" autocapitalize="off" spellcheck="false">
+        </div>
+        <div id="m-heading" class="m-heading"></div>
+        <div id="tree" role="tree" aria-label="Ordner und Notizen"></div>
+        <div id="results" hidden></div>
+        <div id="sidebar-actions">
+          <button type="button" id="btn-new-note" class="link-btn">+ Notiz</button>
+          <button type="button" id="btn-new-folder" class="link-btn">+ Ordner</button>
+        </div>
+      </aside>
+
+      <section id="editor-pane">
+        <div id="conflictbar" hidden>
+          <p id="conflict-text"></p>
+          <div class="conflict-actions">
+            <button type="button" class="btn" data-conflict="mine">Meine Version behalten</button>
+            <button type="button" class="btn" data-conflict="theirs">Andere Version laden</button>
+            <button type="button" class="btn" data-conflict="both">Beide speichern</button>
+          </div>
+        </div>
+        <textarea id="editor" spellcheck="false" autocomplete="off" autocapitalize="sentences" aria-label="Notiztext" hidden></textarea>
+        <div id="empty">
+          <p class="empty-title">Keine Notiz geöffnet</p>
+          <p>Wähle links eine Notiz oder lege mit <kbd>Strg</kbd>+<kbd>Alt</kbd>+<kbd>N</kbd> eine neue an.</p>
+        </div>
+      </section>
+    </div>
+
+    <footer id="statusbar">
+      <span id="st-pos"></span>
+      <button type="button" id="st-zoom" class="st-btn" title="Standardgröße"></button>
+      <button type="button" id="st-wrap" class="st-btn" title="Zeilenumbruch umschalten"></button>
+      <span id="st-save"></span>
+    </footer>
+  </div>
+
+  <div id="popup" class="popup" role="menu" hidden></div>
+
+  <div id="dialog-backdrop" hidden>
+    <form id="dialog" class="dialog" role="dialog" aria-modal="true">
+      <h2 id="dialog-title"></h2>
+      <p id="dialog-text"></p>
+      <input id="dialog-input" autocomplete="off" spellcheck="false">
+      <select id="dialog-select"></select>
+      <p id="dialog-error" class="form-error" hidden></p>
+      <div class="dialog-actions">
+        <button type="button" class="btn" id="dialog-cancel">Abbrechen</button>
+        <button type="submit" class="btn primary" id="dialog-ok">OK</button>
+      </div>
+    </form>
+  </div>
+
+  <div id="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>

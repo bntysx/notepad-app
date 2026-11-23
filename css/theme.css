@@ -1,0 +1,82 @@
+/*
+  Design des Notepads. Alle Farben und Schriften stehen nur hier.
+  Für einen anderen Look reicht es, die Werte unten zu ändern.
+*/
+
+:root,
+:root[data-theme="light"] {
+  /* Kopfleiste */
+  --bar-bg: #3E5285;
+  --bar-fg: #ECE8DF;
+  --bar-accent: #E3C46B;
+  --bar-hover: rgba(255, 255, 255, 0.12);
+
+  /* Schreibfläche */
+  --paper: #F4F2ED;
+  --ink: #22283A;
+  --ink-soft: #5B5F6B;
+  --ink-faint: #8A8576;
+  --selection: rgba(62, 82, 133, 0.22);
+
+  /* Ordnerleiste, Statusleiste */
+  --panel: #E7E4DC;
+  --panel-hover: #DEDAD0;
+  --panel-active: #D7D1C3;
+  --line: #D6D1C5;
+  --folder: #2F3C5E;
+
+  /* Akzent */
+  --accent: #B08A2E;
+  --accent-text: #7E6420;
+
+  /* Meldungen */
+  --danger: #A32D2D;
+  --danger-bg: #F6E3E0;
+  --notice-bg: #F3E8C9;
+
+  /* Menüs und Dialoge */
+  --popup: #FBFAF7;
+  --popup-line: #D6D1C5;
+  --shadow: 0 8px 24px rgba(20, 25, 40, 0.18);
+  --backdrop: rgba(20, 25, 40, 0.35);
+
+  /* Schriften */
+  --font-ui: "Segoe UI", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-text: "Segoe UI", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-serif: "Cormorant Garamond", Garamond, Georgia, serif;
+
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --bar-bg: #2E3A5A;
+  --bar-fg: #D9D4C8;
+  --bar-accent: #D9B95E;
+  --bar-hover: rgba(255, 255, 255, 0.08);
+
+  --paper: #1E2433;
+  --ink: #E6E2D8;
+  --ink-soft: #A9A598;
+  --ink-faint: #7F7C73;
+  --selection: rgba(217, 185, 94, 0.28);
+
+  --panel: #252C3E;
+  --panel-hover: #2B3347;
+  --panel-active: #2F3850;
+  --line: #343D55;
+  --folder: #C9C4B8;
+
+  --accent: #D9B95E;
+  --accent-text: #D9B95E;
+
+  --danger: #F09595;
+  --danger-bg: #4A2326;
+  --notice-bg: #3D3522;
+
+  --popup: #2A3246;
+  --popup-line: #3B4560;
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  --backdrop: rgba(0, 0, 0, 0.5);
+
+  color-scheme: dark;
+}
